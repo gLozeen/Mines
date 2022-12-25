@@ -21,4 +21,7 @@ export class GameStore {
 
     stateHandlers[newState]();
   }
+  mineClicked() {
+    return alert("Mine clicked!");
+  }
 }
