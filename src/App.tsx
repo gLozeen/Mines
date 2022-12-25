@@ -8,7 +8,7 @@ import { GameStore } from "./lib/gameStore";
 export const gameStore = new GameStore();
 const App = observer(() => {
   React.useEffect(() => {
-    alert("woaa");
+    alert("woa");
   }, []);
   return (
     <>
