@@ -1,12 +1,12 @@
 import { computed, makeAutoObservable } from "mobx";
 import { effectsMap, stateHandlers, stateTransitions } from "./stateMap";
-import { ButtonType, GameState, GameStatePayload } from "./stateMap.types";
+import { GameState, GameStatePayload } from "./stateMap.types";
 
 export class GameStore {
   constructor() {
     makeAutoObservable(this);
   }
-  state: GameState = GameState.Bet;
+  state: GameState = GameState.GenerateMines;
   changeState<T extends GameState>(payload?: GameStatePayload<T>): void {
     //@ts-ignore
     const newState = stateTransitions[this.state](payload);
@@ -23,5 +23,10 @@ export class GameStore {
   }
   mineClicked() {
     return alert("Mine clicked!");
+  }
+  isDisabled() {
+    if (this.state === GameState.BetAwait) {
+      return false;
+    } else return true;
   }
 }

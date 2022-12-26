@@ -1,11 +1,9 @@
 export enum GameState {
-  Bet = "Bet",
-  Setup = "Setup",
-  Hit = "Hit",
-  Stand = "Stand",
-  PlayerTurn = "PlayerTurn",
-  DealerTurn = "DealerTurn",
-  EndGame = "EndGame",
+  GenerateMines = "generateMines",
+  BetAwait = "BetAwait",
+  ChangeMineLook = "changeMineLook",
+  PlayerTurn = "playerTurn",
+  GameEnd = "gameEnd",
 }
 
 export type GameStateTransition<T extends GameState> = (
@@ -28,8 +26,7 @@ export type GameStateHandler<T extends GameState> = (
 
 export interface GameStatePossiblePayload
   extends Record<GameState, Record<string, any>> {
-  [GameState.PlayerTurn]: { buttonType: ButtonType };
-  [GameState.Bet]: { betAmount: number };
+  [GameState.ChangeMineLook]: { isLosing: IsLosing };
 }
 
 export type GameStatePayload<T extends GameState> = GameStatePossiblePayload[T];
@@ -38,9 +35,7 @@ export type GameStateHandlers = {
   [T in GameState]: GameStateHandler<T>;
 };
 
-export enum ButtonType {
-  Hit,
-  Stand,
-  Bet,
-  Surrender,
+export enum IsLosing {
+  Lose,
+  WonTurn,
 }
