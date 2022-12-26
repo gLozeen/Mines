@@ -36,6 +36,6 @@ export type GameStateHandlers = {
 };
 
 export enum IsLosing {
-  Lose,
+  LoseTurn,
   WonTurn,
 }

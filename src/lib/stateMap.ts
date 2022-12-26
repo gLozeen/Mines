@@ -11,7 +11,7 @@ import {
 export const stateTransitions: GameStateTransitions = {
   [GameState.BetAwait]: () => GameState.GenerateMines,
   [GameState.GenerateMines]: () => GameState.PlayerTurn,
-  [GameState.PlayerTurn]: () => GameState.ChangeMineLook,
+  [GameState.PlayerTurn]: () => GameState.PlayerTurn,
   [GameState.ChangeMineLook]: (payload) => {
     if (payload?.isLosing === IsLosing.WonTurn) return GameState.PlayerTurn;
     else return GameState.GameEnd;
@@ -23,21 +23,19 @@ export const effectsMap: GameStateEffect[] = [];
 
 export const stateHandlers: GameStateHandlers = {
   [GameState.GenerateMines]: () => {
-    throw new Error("Function not implemented.");
+    gameStore.generateMines();
   },
   [GameState.ChangeMineLook]: () => {
     throw new Error("Function not implemented.");
   },
   [GameState.PlayerTurn]: () => {
-    throw new Error("Function not implemented.");
+    console.log("Player");
   },
   [GameState.GameEnd]: () => {
     throw new Error("Function not implemented.");
   },
-  [GameState.BetAwait]: function (
-    payload?: Record<string, any> | undefined
-  ): void {
-    throw new Error("Function not implemented.");
+  [GameState.BetAwait]: () => {
+    console.log("BetAwait");
   },
 };
 export { GameState };

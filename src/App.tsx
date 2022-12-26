@@ -4,9 +4,8 @@ import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react";
 import styled from "@emotion/styled";
 import { GameStore } from "./lib/gameStore";
-import { MineCase } from "./components/mine/MineCase";
-import { Mine } from "./components/mine/Mine";
-import { MineLine } from "./components/mine/MineLine";
+import { MineCase } from "./components/mines/MineCase";
+import { Mine } from "./components/mines/mine";
 import {
   Amount10,
   Amount100,
@@ -17,75 +16,29 @@ import {
 } from "./components/buttons/amounts";
 import { Buttons } from "./components/buttons/button.styled";
 import { GameState } from "./lib/stateMap.types";
+import { Case } from "./components/mines/case";
 
 export const gameStore = new GameStore();
 const App = observer(() => {
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    console.log(gameStore.state);
+    gameStore.changeState();
+  }, []);
   return (
     <>
-      <Buttons>
-        <Amount5
-          onClick={() => gameStore.changeState()}
-          disabled={gameStore.isDisabled()}
-        />
-        <Amount10
-          onClick={() => gameStore.changeState()}
-          disabled={gameStore.isDisabled()}
-        />
-        <Amount15
-          onClick={() => gameStore.changeState()}
-          disabled={gameStore.isDisabled()}
-        />
-        <Amount25
-          onClick={() => gameStore.changeState()}
-          disabled={gameStore.isDisabled()}
-        />
-        <Amount50
-          onClick={() => gameStore.changeState()}
-          disabled={gameStore.isDisabled()}
-        />
-        <Amount100
-          onClick={() => gameStore.changeState()}
-          disabled={gameStore.isDisabled()}
-        />
-      </Buttons>
-      <MineCase>
-        <MineLine>
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-        </MineLine>
-        <MineLine>
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-        </MineLine>
-        <MineLine>
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-        </MineLine>
-        <MineLine>
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-        </MineLine>
-        <MineLine>
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-          <Mine onClick={() => gameStore.mineClicked()} />
-        </MineLine>
-      </MineCase>
+      <Case>
+        <MineCase>
+          {gameStore.mines.map((mine, mineIndex) => (
+            <Mine
+              key={`mine${mineIndex}`}
+              onClick={() => gameStore.flip(mine.x, mine.y)}
+              data-revealed={mine.isRevealed}
+            >
+              {mine.isRevealed ? (mine.isMine ? "💣" : "⭐") : ""}
+            </Mine>
+          ))}
+        </MineCase>
+      </Case>
     </>
   );
 });
