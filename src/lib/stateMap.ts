@@ -5,17 +5,13 @@ import {
   GameStateEffect,
   GameStateHandlers,
   GameStateTransitions,
-  IsLosing,
 } from "./stateMap.types";
 
 export const stateTransitions: GameStateTransitions = {
   [GameState.BetAwait]: () => GameState.GenerateMines,
   [GameState.GenerateMines]: () => GameState.PlayerTurn,
   [GameState.PlayerTurn]: () => GameState.PlayerTurn,
-  [GameState.ChangeMineLook]: (payload) => {
-    if (payload?.isLosing === IsLosing.WonTurn) return GameState.PlayerTurn;
-    else return GameState.GameEnd;
-  },
+  [GameState.ChangeMineLook]: (payload) => GameState.GameEnd,
   [GameState.GameEnd]: () => GameState.GameEnd,
 };
 

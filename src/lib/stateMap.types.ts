@@ -26,7 +26,7 @@ export type GameStateHandler<T extends GameState> = (
 
 export interface GameStatePossiblePayload
   extends Record<GameState, Record<string, any>> {
-  [GameState.ChangeMineLook]: { isLosing: IsLosing };
+  [GameState.BetAwait]: { betAmount: number };
 }
 
 export type GameStatePayload<T extends GameState> = GameStatePossiblePayload[T];
@@ -34,8 +34,3 @@ export type GameStatePayload<T extends GameState> = GameStatePossiblePayload[T];
 export type GameStateHandlers = {
   [T in GameState]: GameStateHandler<T>;
 };
-
-export enum IsLosing {
-  LoseTurn,
-  WonTurn,
-}

@@ -5,15 +5,8 @@ import { observer } from "mobx-react";
 import styled from "@emotion/styled";
 import { GameStore } from "./lib/gameStore";
 import { MineCase } from "./components/mines/MineCase";
-import { Mine } from "./components/mines/mine";
-import {
-  Amount10,
-  Amount100,
-  Amount15,
-  Amount25,
-  Amount5,
-  Amount50,
-} from "./components/buttons/amounts";
+import { Mine, MineComponent } from "./components/mines/mine";
+import { Bet } from "./components/buttons/bet";
 import { Buttons } from "./components/buttons/button.styled";
 import { GameState } from "./lib/stateMap.types";
 import { Case } from "./components/mines/case";
@@ -26,16 +19,21 @@ const App = observer(() => {
   }, []);
   return (
     <>
+      <Buttons>
+        {[5, 10, 15, 25, 50, 100].map((bet) => (
+          <Bet betAmount={bet} key={`bet${bet}`}></Bet>
+        ))}
+      </Buttons>
       <Case>
         <MineCase>
           {gameStore.mines.map((mine, mineIndex) => (
-            <Mine
+            <MineComponent
               key={`mine${mineIndex}`}
               onClick={() => gameStore.flip(mine.x, mine.y)}
-              data-revealed={mine.isRevealed}
+              revealed={mine.isRevealed}
             >
               {mine.isRevealed ? (mine.isMine ? "💣" : "⭐") : ""}
-            </Mine>
+            </MineComponent>
           ))}
         </MineCase>
       </Case>
