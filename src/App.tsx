@@ -10,6 +10,7 @@ import { Bet } from "./components/buttons/bet";
 import { Buttons } from "./components/buttons/button.styled";
 import { GameState } from "./lib/stateMap.types";
 import { Case } from "./components/mines/case";
+import { ShowBet } from "./components/bet/showBet";
 
 export const gameStore = new GameStore();
 const App = observer(() => {
@@ -19,20 +20,28 @@ const App = observer(() => {
   }, []);
   return (
     <>
+      <ShowBet betAmount={gameStore.betAmount} />
       <Buttons>
         {[5, 10, 15, 25, 50, 100].map((bet) => (
-          <Bet betAmount={bet} key={`bet${bet}`}></Bet>
+          <Bet
+            betAmount={bet}
+            key={`bet${bet}`}
+            onClick={() => {
+              gameStore.setBet(bet);
+              console.log(gameStore.betAmount);
+            }}
+          ></Bet>
         ))}
       </Buttons>
       <Case>
         <MineCase>
-          {gameStore.mines.map((mine, mineIndex) => (
+          {gameStore.fields.map((field, mineIndex) => (
             <MineComponent
               key={`mine${mineIndex}`}
-              onClick={() => gameStore.flip(mine.x, mine.y)}
-              revealed={mine.isRevealed}
+              onClick={() => gameStore.mineClicked(field)}
+              revealed={field.isRevealed}
             >
-              {mine.isRevealed ? (mine.isMine ? "💣" : "⭐") : ""}
+              {field.isRevealed ? (field.isMine ? "💣" : "⭐") : ""}
             </MineComponent>
           ))}
         </MineCase>

@@ -14,7 +14,7 @@ export const MineInner = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 1s;
+  transition: transform 0.5s;
   transform-style: preserve-3d;
   &[data-revealed="true"] {
     transform: rotateY(180deg);

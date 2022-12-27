@@ -4,6 +4,7 @@ export enum GameState {
   ChangeMineLook = "changeMineLook",
   PlayerTurn = "playerTurn",
   GameEnd = "gameEnd",
+  Init = "",
 }
 
 export type GameStateTransition<T extends GameState> = (
@@ -27,6 +28,7 @@ export type GameStateHandler<T extends GameState> = (
 export interface GameStatePossiblePayload
   extends Record<GameState, Record<string, any>> {
   [GameState.BetAwait]: { betAmount: number };
+  [GameState.ChangeMineLook]: { x: number; y: number; isMine: boolean };
 }
 
 export type GameStatePayload<T extends GameState> = GameStatePossiblePayload[T];

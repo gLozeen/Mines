@@ -8,30 +8,39 @@ import {
 } from "./stateMap.types";
 
 export const stateTransitions: GameStateTransitions = {
-  [GameState.BetAwait]: () => GameState.GenerateMines,
-  [GameState.GenerateMines]: () => GameState.PlayerTurn,
-  [GameState.PlayerTurn]: () => GameState.PlayerTurn,
-  [GameState.ChangeMineLook]: (payload) => GameState.GameEnd,
-  [GameState.GameEnd]: () => GameState.GameEnd,
+  [GameState.BetAwait]: () => GameState.PlayerTurn,
+  [GameState.GenerateMines]: () => GameState.BetAwait,
+  [GameState.PlayerTurn]: () => GameState.ChangeMineLook,
+  [GameState.ChangeMineLook]: (payload) => {
+    console.log(payload);
+    return gameStore.isMineTest ? GameState.GameEnd : GameState.PlayerTurn;
+  },
+  [GameState.GameEnd]: () => GameState.GenerateMines,
+  [GameState.Init]: () => GameState.GenerateMines,
 };
 
 export const effectsMap: GameStateEffect[] = [];
 
 export const stateHandlers: GameStateHandlers = {
   [GameState.GenerateMines]: () => {
-    gameStore.generateMines();
+    gameStore.fields = [];
+    gameStore.generateFields();
+    gameStore.changeState();
   },
   [GameState.ChangeMineLook]: () => {
-    throw new Error("Function not implemented.");
+    console.log(`ChangeMineLook   ${gameStore.isMineTest}`);
   },
   [GameState.PlayerTurn]: () => {
     console.log("Player");
   },
   [GameState.GameEnd]: () => {
-    throw new Error("Function not implemented.");
+    gameStore.gameEnd();
   },
   [GameState.BetAwait]: () => {
     console.log("BetAwait");
+  },
+  [GameState.Init]: () => {
+    gameStore.changeState();
   },
 };
 export { GameState };
