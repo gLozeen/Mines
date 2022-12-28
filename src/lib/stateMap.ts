@@ -35,6 +35,7 @@ export const stateHandlers: GameStateHandlers = {
   },
   [GameState.GameEnd]: () => {
     gameStore.gameEnd();
+    gameStore.showAllFields();
   },
   [GameState.BetAwait]: () => {
     console.log("BetAwait");

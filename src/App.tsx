@@ -1,16 +1,15 @@
 import React from "react";
 import "./App.css";
-import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react";
-import styled from "@emotion/styled";
 import { GameStore } from "./lib/gameStore";
 import { MineCase } from "./components/mines/MineCase";
-import { Mine, MineComponent } from "./components/mines/mine";
+import { MineComponent } from "./components/mines/mine";
 import { Bet } from "./components/buttons/bet";
-import { Buttons } from "./components/buttons/button.styled";
 import { GameState } from "./lib/stateMap.types";
 import { Case } from "./components/mines/case";
 import { ShowBet } from "./components/bet/showBet";
+import { Repeat } from "./components/buttons/repeat";
+import { ButtonsCase } from "./components/buttons/buttonsCase";
 
 export const gameStore = new GameStore();
 const App = observer(() => {
@@ -21,18 +20,24 @@ const App = observer(() => {
   return (
     <>
       <ShowBet betAmount={gameStore.betAmount} />
-      <Buttons>
-        {[5, 10, 15, 25, 50, 100].map((bet) => (
-          <Bet
-            betAmount={bet}
-            key={`bet${bet}`}
+
+      <ButtonsCase>
+        {gameStore.state !== GameState.BetAwait && (
+          <Repeat
+            data-disabled={gameStore.state !== GameState.GameEnd}
             onClick={() => {
-              gameStore.setBet(bet);
-              console.log(gameStore.betAmount);
+              if (gameStore.state === GameState.GameEnd)
+                gameStore.changeState();
             }}
-          ></Bet>
-        ))}
-      </Buttons>
+          >
+            Repeat ♻
+          </Repeat>
+        )}
+        {gameStore.state === GameState.BetAwait &&
+          [5, 10, 15, 25, 50, 100].map((bet) => (
+            <Bet betAmount={bet} key={`bet${bet}`}></Bet>
+          ))}
+      </ButtonsCase>
       <Case>
         <MineCase>
           {gameStore.fields.map((field, mineIndex) => (

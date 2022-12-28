@@ -3,3 +3,7 @@ export interface ActionButtonProps
   disabled?: boolean;
   betAmount: number;
 }
+export interface ButtonsProps
+  extends Partial<React.HTMLAttributes<HTMLDivElement>> {
+  isPlayerTurn?: boolean;
+}

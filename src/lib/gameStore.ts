@@ -89,6 +89,8 @@ export class GameStore {
   }
 
   generateFields() {
+    this.turn = 0;
+    this.betAmount = 0;
     if (this.fields.length === 0) this.fillFieldContainer();
   }
 
@@ -112,5 +114,9 @@ export class GameStore {
       },
       position: "bottom-center",
     });
+  }
+
+  showAllFields() {
+    gameStore.fields.map((field) => (field.isRevealed = true));
   }
 }

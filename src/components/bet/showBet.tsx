@@ -20,6 +20,6 @@ export interface ShowBetProps {
 
 export const ShowBet = observer((props: ShowBetProps) => (
   <Bet>
-    {Math.floor(props.betAmount * gameStore.coefficient[gameStore.turn])}
+    {Math.floor(gameStore.betAmount * gameStore.coefficient[gameStore.turn])}
   </Bet>
 ));
