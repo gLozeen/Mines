@@ -10,6 +10,7 @@ import { Case } from "./components/mines/case";
 import { ShowBet } from "./components/bet/showBet";
 import { Repeat } from "./components/buttons/repeat";
 import { ButtonsCase } from "./components/buttons/buttonsCase";
+import { StartGame } from "./components/buttons/startGame";
 
 export const gameStore = new GameStore();
 const App = observer(() => {
@@ -22,21 +23,23 @@ const App = observer(() => {
       <ShowBet betAmount={gameStore.betAmount} />
 
       <ButtonsCase>
-        {gameStore.state !== GameState.BetAwait && (
-          <Repeat
-            data-disabled={gameStore.state !== GameState.GameEnd}
-            onClick={() => {
-              if (gameStore.state === GameState.GameEnd)
-                gameStore.changeState();
-            }}
-          >
-            Repeat ♻
-          </Repeat>
-        )}
+        {gameStore.state !== GameState.BetAwait &&
+          gameStore.state !== GameState.Init && (
+            <Repeat
+              data-disabled={gameStore.state !== GameState.GameEnd}
+              onClick={() => {
+                if (gameStore.state === GameState.GameEnd)
+                  gameStore.changeState();
+              }}
+            >
+              Repeat ♻
+            </Repeat>
+          )}
         {gameStore.state === GameState.BetAwait &&
           [5, 10, 15, 25, 50, 100].map((bet) => (
             <Bet betAmount={bet} key={`bet${bet}`}></Bet>
           ))}
+        {gameStore.state === GameState.BetAwait && <StartGame />}
       </ButtonsCase>
       <Case>
         <MineCase>

@@ -39,3 +39,10 @@ export const StyledButtonsCase = styled.div`
   }
   gap: 10px;
 `;
+
+export const StyledStartGame = styled(ActionButton)`
+  width: 210px;
+  height: 50px;
+  font-size: 20px;
+  grid-column: span 2;
+`;

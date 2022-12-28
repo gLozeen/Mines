@@ -7,3 +7,7 @@ export interface ButtonsProps
   extends Partial<React.HTMLAttributes<HTMLDivElement>> {
   isPlayerTurn?: boolean;
 }
+export interface StartGameProps
+  extends Partial<React.HTMLAttributes<HTMLDivElement>> {
+  allInputs?: boolean;
+}
