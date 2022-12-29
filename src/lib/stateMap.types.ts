@@ -1,6 +1,6 @@
 export enum GameState {
   GenerateMines = "generateMines",
-  BetAwait = "BetAwait",
+  StartAwait = "StartAwait",
   ChangeMineLook = "changeMineLook",
   PlayerTurn = "playerTurn",
   GameEnd = "gameEnd",
@@ -27,8 +27,9 @@ export type GameStateHandler<T extends GameState> = (
 
 export interface GameStatePossiblePayload
   extends Record<GameState, Record<string, any>> {
-  [GameState.BetAwait]: { betAmount: number };
+  [GameState.StartAwait]: { betAmount: number };
   [GameState.ChangeMineLook]: { x: number; y: number; isMine: boolean };
+  [GameState.GameEnd]: { buttonType: ButtonType };
 }
 
 export type GameStatePayload<T extends GameState> = GameStatePossiblePayload[T];
@@ -36,3 +37,7 @@ export type GameStatePayload<T extends GameState> = GameStatePossiblePayload[T];
 export type GameStateHandlers = {
   [T in GameState]: GameStateHandler<T>;
 };
+export enum ButtonType {
+  Repeat,
+  GoBack,
+}

@@ -12,6 +12,7 @@ export interface Field {
 }
 
 export class GameStore {
+  minesAmount: number = 0;
   fields: Field[] = [];
   betAmount: number = 0;
   coefficient: number[] = [
@@ -22,9 +23,11 @@ export class GameStore {
   prize: number[] = [];
   turn: number = 0;
   isMineTest: boolean = false;
+
   constructor() {
     makeAutoObservable(this);
   }
+
   state: GameState = GameState.Init;
   changeState<T extends GameState>(payload?: GameStatePayload<T>): void {
     //@ts-ignore
@@ -48,6 +51,10 @@ export class GameStore {
     this.betAmount = bet;
   }
 
+  setMinesAmount(amount: number) {
+    this.minesAmount = amount;
+  }
+
   mineClicked(field: Field) {
     if (this.state !== GameState.PlayerTurn) return;
     console.log(`${this.state}`);
@@ -63,7 +70,7 @@ export class GameStore {
 
   fillFieldContainer() {
     if (this.fields.length) return;
-    const minesToPlace = 3;
+    const minesToPlace = this.minesAmount;
     let minesPlaced = 0;
     for (let i = 0; i < 5; i++) {
       for (let j = 0; j < 5; j++) {
@@ -90,8 +97,6 @@ export class GameStore {
   }
 
   generateFields() {
-    this.turn = 0;
-    this.betAmount = 0;
     if (this.fields.length === 0) this.fillFieldContainer();
   }
 
@@ -100,6 +105,36 @@ export class GameStore {
     if (!found) return;
     if (found.isRevealed === false) this.turn++;
     found.isRevealed = true;
+  }
+
+  allInputsNotProvided() {
+    if (!this.betAmount) {
+      toast("You have to choose how much you want to bet", {
+        icon: "💢",
+        position: "top-center",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+          width: "1000px",
+          height: "100px",
+          fontSize: "23px",
+        },
+      });
+    } else if (!this.minesAmount) {
+      toast("You have to choose how much mines you want", {
+        icon: "💢",
+        position: "top-center",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+          width: "1000px",
+          height: "100px",
+          fontSize: "23px",
+        },
+      });
+    }
   }
 
   gameEnd() {
@@ -113,7 +148,7 @@ export class GameStore {
         height: "100px",
         fontSize: "40px",
       },
-      position: "bottom-center",
+      position: "top-center",
     });
   }
 

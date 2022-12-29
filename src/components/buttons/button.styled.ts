@@ -1,6 +1,4 @@
 import styled from "@emotion/styled";
-import { observer } from "mobx-react";
-import { ButtonsProps } from "./button.types";
 
 export const ActionButton = styled.div`
   font-weight: bold;
