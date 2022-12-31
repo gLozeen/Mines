@@ -14,9 +14,10 @@ export const ActionButton = styled.div`
       background-color: #4e568f;
       transform: scale(0.95);
     }
-    &[data-disabled="true"] {
-      background-color: #262754;
-    }
+  }
+
+  &[data-disabled="true"] {
+    background-color: #262754;
   }
 
   color: white;
@@ -34,6 +35,7 @@ export const StyledButtonsCase = styled.div`
   grid-template-columns: 1fr 1fr;
   &[data-is-player-turn="true"] {
     grid-template-columns: 1fr;
+    z-index: 100;
   }
   gap: 10px;
 `;

@@ -45,12 +45,26 @@ const App = observer(() => {
         {gameStore.state !== GameState.StartAwait &&
           gameStore.state !== GameState.Init && (
             <GoBack
-              data-disabled={gameStore.state !== GameState.GameEnd}
+              data-disabled={
+                !(gameStore.state === GameState.GameEnd || gameStore.turn >= 1)
+              }
               onClick={() => {
-                if (gameStore.state === GameState.GameEnd)
+                if (
+                  gameStore.state === GameState.GameEnd &&
+                  gameStore.turn >= 1
+                )
                   gameStore.changeState<GameState.GameEnd>({
                     buttonType: ButtonType.GoBack,
                   });
+                else if (
+                  gameStore.state === GameState.PlayerTurn &&
+                  gameStore.turn >= 1
+                ) {
+                  gameStore.isWon = true;
+                  gameStore.changeState<GameState.PlayerTurn>({
+                    buttonType: ButtonType.GoBack,
+                  });
+                }
               }}
             >
               Go back ◀

@@ -20,9 +20,9 @@ export class GameStore {
     0.075, 0.076, 0.077, 0.078, 0.079, 0.08, 0.081, 0.082, 0.083, 0.084, 0.085,
     0.086, 0.087,
   ];
-  prize: number[] = [];
   turn: number = 0;
   isMineTest: boolean = false;
+  isWon: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -61,6 +61,7 @@ export class GameStore {
     gameStore.changeState();
     this.isMineTest = field.isMine;
     this.flip(field.x, field.y);
+    this.turn++;
     this.changeState<GameState.ChangeMineLook>({
       x: field.x,
       y: field.y,
@@ -101,10 +102,10 @@ export class GameStore {
   }
 
   flip(x: number, y: number) {
+    console.log(this.turn);
     const found = this.fields.find((Field) => Field.x === x && Field.y === y);
     if (!found) return;
-    if (found.isRevealed === false) this.turn++;
-    found.isRevealed = true;
+    if (found.isRevealed === false) found.isRevealed = true;
   }
 
   allInputsNotProvided() {
@@ -137,19 +138,33 @@ export class GameStore {
     }
   }
 
-  gameEnd() {
-    toast("You lose!", {
-      icon: "❌",
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-        width: "1000px",
-        height: "100px",
-        fontSize: "40px",
-      },
-      position: "top-center",
-    });
+  gameEnd(isWon: boolean) {
+    if (isWon === false)
+      toast("You lose!", {
+        icon: "❌",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+          width: "1000px",
+          height: "100px",
+          fontSize: "40px",
+        },
+        position: "top-center",
+      });
+    else
+      toast(`You win ${this.betAmount}`, {
+        icon: "💲",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+          width: "1000px",
+          height: "100px",
+          fontSize: "40px",
+        },
+        position: "top-center",
+      });
   }
 
   showAllFields() {

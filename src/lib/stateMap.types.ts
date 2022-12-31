@@ -30,6 +30,7 @@ export interface GameStatePossiblePayload
   [GameState.StartAwait]: { betAmount: number };
   [GameState.ChangeMineLook]: { x: number; y: number; isMine: boolean };
   [GameState.GameEnd]: { buttonType: ButtonType };
+  [GameState.PlayerTurn]: { buttonType: ButtonType };
 }
 
 export type GameStatePayload<T extends GameState> = GameStatePossiblePayload[T];
