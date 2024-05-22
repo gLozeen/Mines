@@ -19,7 +19,7 @@ export class GameStore {
   coefficient: number[] = [
     0, 0.057, 0.061, 0.064, 0.066, 0.068, 0.069, 0.071, 0.072, 0.073, 0.074,
     0.075, 0.076, 0.077, 0.078, 0.079, 0.08, 0.081, 0.082, 0.083, 0.084, 0.085,
-    0.086, 0.087,
+    0.086, 0.087, 0.09, 0.095,
   ];
   turn: number = 0;
   toWin: number = 0;
@@ -108,7 +108,7 @@ export class GameStore {
     if (found.isRevealed === false) found.isRevealed = true;
   }
 
-  startErrorHandler() {
+  errorHandler() {
     if (!this.betAmount) {
       toast("You have to choose how much you want to bet", {
         icon: "💢",

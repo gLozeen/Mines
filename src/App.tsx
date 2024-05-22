@@ -49,10 +49,14 @@ const App = observer(() => {
             <Repeat
               data-disabled={gameStore.state !== GameState.GameEnd}
               onClick={() => {
-                if (gameStore.state === GameState.GameEnd)
+                if (
+                  gameStore.state === GameState.GameEnd &&
+                  gameStore.funds - gameStore.betAmount > 0
+                ) {
                   gameStore.changeState<GameState.GameEnd>({
                     buttonType: ButtonType.Repeat,
                   });
+                } else gameStore.errorHandler();
               }}
             >
               Repeat ♻

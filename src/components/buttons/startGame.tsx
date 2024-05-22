@@ -8,11 +8,11 @@ export const StartGame = observer((props: StartGameProps) => (
   <StyledStartGame
     data-all-inputs={props.allInputs}
     onClick={() => {
-      console.log(props.allInputs);
-      if (props.allInputs && gameStore.funds - gameStore.betAmount > 0) {
+      console.log(props.allInputs, gameStore.funds - gameStore.betAmount >= 0);
+      if (props.allInputs && gameStore.funds - gameStore.betAmount >= 0) {
         gameStore.changeState<GameState.StartAwait>();
       } else {
-        gameStore.startErrorHandler();
+        gameStore.errorHandler();
       }
     }}
   >
