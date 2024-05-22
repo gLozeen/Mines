@@ -9,10 +9,10 @@ export const StartGame = observer((props: StartGameProps) => (
     data-all-inputs={props.allInputs}
     onClick={() => {
       console.log(props.allInputs);
-      if (props.allInputs) {
+      if (props.allInputs && gameStore.funds - gameStore.betAmount > 0) {
         gameStore.changeState<GameState.StartAwait>();
       } else {
-        gameStore.allInputsNotProvided();
+        gameStore.startErrorHandler();
       }
     }}
   >

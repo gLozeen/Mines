@@ -7,7 +7,7 @@ import { MineComponent } from "./components/mines/mine";
 import { Bet } from "./components/buttons/bet";
 import { ButtonType, GameState } from "./lib/stateMap.types";
 import { Case } from "./components/mines/case";
-import { ShowBet } from "./components/bet/showBet";
+import { ShowBet } from "./components/money/showBet";
 import { Repeat } from "./components/buttons/repeat";
 import { ButtonsCase } from "./components/buttons/buttonsCase";
 import { StartGame } from "./components/buttons/startGame";
@@ -16,16 +16,30 @@ import {
   MineAmountCase,
 } from "./components/buttons/mineAmountCase";
 import { GoBack } from "./components/buttons/goBack";
+import { ShowFunds } from "./components/money/showFunds";
 
 export const gameStore = new GameStore();
 const App = observer(() => {
   React.useEffect(() => {
-    console.log(gameStore.state);
+    console.log("init", !document.cookie);
+    if (!document.cookie) document.cookie = "funds=1000";
+    else {
+      gameStore.funds = +document.cookie.substring(6);
+    }
+    console.log("current funds", gameStore.funds);
     gameStore.changeState();
   }, []);
   return (
     <>
-      <ShowBet betAmount={gameStore.betAmount} />
+      <ShowBet
+        betAmount={
+          gameStore.state === GameState.StartAwait
+            ? gameStore.betAmount
+            : gameStore.toWin
+        }
+        gamestore={gameStore}
+      />
+      <ShowFunds funds={gameStore.funds} />
 
       <ButtonsCase isPlayerTurn={true}>
         {gameStore.state !== GameState.StartAwait &&

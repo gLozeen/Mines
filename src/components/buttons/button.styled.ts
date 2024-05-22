@@ -18,6 +18,10 @@ export const ActionButton = styled.div`
 
   &[data-disabled="true"] {
     background-color: #262754;
+    @media (hover: hover) {
+      background-color: #262754;
+      transform: scale(1);
+    }
   }
 
   color: white;

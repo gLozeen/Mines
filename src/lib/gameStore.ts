@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import toast from "react-hot-toast";
 import { gameStore } from "../App";
-import { effectsMap, stateHandlers, stateTransitions } from "./stateMap";
+import { stateHandlers, stateTransitions } from "./stateMap";
 import { GameState, GameStatePayload } from "./stateMap.types";
 
 export interface Field {
@@ -14,6 +14,7 @@ export interface Field {
 export class GameStore {
   minesAmount: number = 0;
   fields: Field[] = [];
+  funds: number = 0;
   betAmount: number = 0;
   coefficient: number[] = [
     0, 0.057, 0.061, 0.064, 0.066, 0.068, 0.069, 0.071, 0.072, 0.073, 0.074,
@@ -21,6 +22,7 @@ export class GameStore {
     0.086, 0.087,
   ];
   turn: number = 0;
+  toWin: number = 0;
   isMineTest: boolean = false;
   isWon: boolean = false;
 
@@ -33,13 +35,6 @@ export class GameStore {
     //@ts-ignore
     const newState = stateTransitions[this.state](payload);
 
-    effectsMap
-      .filter(
-        (effect) =>
-          effect.from.includes(this.state) && effect.to.includes(newState)
-      )
-      .forEach((map) => map.effects.forEach((effect) => effect()));
-
     console.log(`${this.state} > ${newState}`);
 
     this.state = newState;
@@ -51,6 +46,10 @@ export class GameStore {
     this.betAmount = bet;
   }
 
+  setCookie(funds: number) {
+    document.cookie = `funds=${funds}`;
+  }
+
   setMinesAmount(amount: number) {
     this.minesAmount = amount;
   }
@@ -58,6 +57,7 @@ export class GameStore {
   mineClicked(field: Field) {
     if (this.state !== GameState.PlayerTurn) return;
     console.log(`${this.state}`);
+    this.addToWin(Math.floor(this.betAmount * this.coefficient[this.turn]));
     gameStore.changeState();
     this.isMineTest = field.isMine;
     this.flip(field.x, field.y);
@@ -108,7 +108,7 @@ export class GameStore {
     if (found.isRevealed === false) found.isRevealed = true;
   }
 
-  allInputsNotProvided() {
+  startErrorHandler() {
     if (!this.betAmount) {
       toast("You have to choose how much you want to bet", {
         icon: "💢",
@@ -136,6 +136,23 @@ export class GameStore {
         },
       });
     }
+    if (this.funds - this.betAmount < 0) {
+      toast(
+        "You are too poor to play this game. Choose another bet or remove cookies.",
+        {
+          position: "top-center",
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+            width: "1000px",
+            height: "100px",
+            fontSize: "18px",
+            textAlign: "center",
+          },
+        }
+      );
+    }
   }
 
   gameEnd(isWon: boolean) {
@@ -152,8 +169,8 @@ export class GameStore {
         },
         position: "top-center",
       });
-    else
-      toast(`You win ${this.betAmount}`, {
+    else {
+      toast(`You win ${this.toWin}$`, {
         icon: "💲",
         style: {
           borderRadius: "10px",
@@ -165,9 +182,17 @@ export class GameStore {
         },
         position: "top-center",
       });
+      gameStore.funds += this.toWin;
+    }
   }
 
   showAllFields() {
     gameStore.fields.map((field) => (field.isRevealed = true));
+  }
+
+  addToWin(addToBet: number) {
+    if (this.toWin <= this.betAmount) this.toWin = this.betAmount;
+    this.toWin += addToBet;
+    return this.toWin;
   }
 }

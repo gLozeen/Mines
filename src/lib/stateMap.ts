@@ -3,7 +3,6 @@ import { gameStore } from "../App";
 import {
   ButtonType,
   GameState,
-  GameStateEffect,
   GameStateHandlers,
   GameStateTransitions,
 } from "./stateMap.types";
@@ -28,12 +27,12 @@ export const stateTransitions: GameStateTransitions = {
   [GameState.Init]: () => GameState.StartAwait,
 };
 
-export const effectsMap: GameStateEffect[] = [];
-
 export const stateHandlers: GameStateHandlers = {
   [GameState.GenerateMines]: () => {
     gameStore.fields = [];
     gameStore.turn = 0;
+    gameStore.toWin = gameStore.betAmount;
+    gameStore.funds -= gameStore.betAmount;
     gameStore.isWon = false;
     gameStore.generateFields();
     gameStore.changeState();
@@ -44,11 +43,13 @@ export const stateHandlers: GameStateHandlers = {
   },
   [GameState.GameEnd]: () => {
     gameStore.gameEnd(gameStore.isWon);
+    gameStore.setCookie(gameStore.funds);
     gameStore.showAllFields();
   },
   [GameState.StartAwait]: () => {
     gameStore.fields = [];
     gameStore.minesAmount = 0;
+    gameStore.toWin = 0;
     gameStore.betAmount = 0;
     console.log("StartAwait");
   },
