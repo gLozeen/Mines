@@ -22,8 +22,10 @@ export const gameStore = new GameStore();
 const App = observer(() => {
   React.useEffect(() => {
     console.log("init", !document.cookie);
-    if (!document.cookie) document.cookie = "funds=1000";
-    else {
+    if (!document.cookie) {
+      document.cookie = "funds=1000";
+      gameStore.funds = +document.cookie.substring(6);
+    } else {
       gameStore.funds = +document.cookie.substring(6);
     }
     console.log("current funds", gameStore.funds);
